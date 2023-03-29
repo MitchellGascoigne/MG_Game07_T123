@@ -22,6 +22,12 @@ public class MenuController : MonoBehaviour
         PhotonNetwork.ConnectUsingSettings(VersioName);
     }
 
+    private void OnConnectedToMaster()
+    {
+        PhotonNetwork.JoinLobby(TypedLobby.Default);
+        Debug.Log("Connected");
+    }
+
     private void Start()
     {
         UsernameMenu.SetActive(true);
@@ -34,7 +40,7 @@ public class MenuController : MonoBehaviour
         Debug.Log("Connected");
     }
 
-    public void ChangeUserNameInput()
+    private void ChangeUserNameInput()
     {
         if (UsernameInput.text.Length >= 0)
         {
@@ -46,9 +52,26 @@ public class MenuController : MonoBehaviour
         }
     }
 
-    public void SetUserName()
+    private void SetUserName()
     {
         UsernameMenu.SetActive(false);
         PhotonNetwork.playerName = UsernameInput.text;
+    }
+
+    private void CreateGame()
+    {
+        PhotonNetwork.CreateRoom(CreateGameInput.text, new RoomOptions() { MaxPlayers = 5 }, null);
+    }
+
+    private void JoinGame()
+    {
+        RoomOptions roomOptions = new RoomOptions();
+        roomOptions.MaxPlayers = 5;
+        PhotonNetwork.JoinOrCreateRoom(JoinGameInput.text, roomOptions, TypedLobby.Default);
+    }
+
+    private void OnJoinedRoom()
+    {
+        PhotonNetwork.LoadLevel("MainGame");
     }
 }

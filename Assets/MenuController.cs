@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,16 +34,9 @@ public class MenuController : MonoBehaviour
         UsernameMenu.SetActive(true);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        PhotonNetwork.JoinLobby(TypedLobby.Default);
-        Debug.Log("Connected");
-    }
-
     private void ChangeUserNameInput()
     {
-        if (UsernameInput.text.Length >= 0)
+        if (UsernameInput.text.Length >= 3)
         {
             StartButton.SetActive(true);
         }
@@ -75,3 +69,5 @@ public class MenuController : MonoBehaviour
         PhotonNetwork.LoadLevel("MainGame");
     }
 }
+
+//You can use the code she is doing in pun 2, you have to add using Photon.Pun; using Photon.Realtime; you need to write .NickName instead of .Username and you have to change monobehaviour to monobehaviourpuncallbacks

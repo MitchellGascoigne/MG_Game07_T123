@@ -42,16 +42,16 @@ public class Player : Photon.MonoBehaviour
         var move = new Vector3(Input.GetAxisRaw("Horizontal"), 0);
         transform.position += move * MoveSpeed * Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKey(KeyCode.A))
         {
             photonView.RPC("FlipTrue", PhotonTargets.AllBuffered);
         }
-        if (Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKey(KeyCode.D))
         {
             photonView.RPC("FlipFalse", PhotonTargets.AllBuffered);
         }
 
-        if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
         {
             anim.SetBool("isRunning", true);
         }

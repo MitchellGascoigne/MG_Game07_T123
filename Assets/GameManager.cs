@@ -11,12 +11,17 @@ public class GameManager : MonoBehaviour
     public GameObject PlayerPrefab;
     public GameObject GameCanvas;
     public GameObject SceneCamera;
+    public TMPro.TextMeshProUGUI PingText;
 
     private void Start()
     {
         SpawnPlayer();
     }
 
+    private void Update()
+    {
+        PingText.text = "Ping: " + PhotonNetwork.GetPing();
+    }
     private void Awake()
     {
         GameCanvas.SetActive(true); 

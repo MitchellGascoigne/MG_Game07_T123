@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AppID: 94b73259-ccaa-4bff-a6d3-38e7e34978c9
   VoiceAppID: 
-  ChatAppID: 
+  ChatAppID: 94b73259-ccaa-4bff-a6d3-38e7e34978c9
   HostType: 1
   PreferredRegion: 0
   EnabledRegions: -1
@@ -43,4 +43,6 @@ MonoBehaviour:
   - RequestForPickupItems
   - RequestForPickupTimes
   - TaggedPlayer
+  - FlipFalse
+  - FlipTrue
   DisableAutoOpenWizard: 1

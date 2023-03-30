@@ -6,11 +6,11 @@ using UnityEngine.UI;
 public class Player : Photon.MonoBehaviour
 {
     public PhotonView photonView;
-    public Rigidbody rb;
+    public Rigidbody2D rb;
     public Animator anim;
     public GameObject PlayerCamera;
     public SpriteRenderer sr;
-    public TextAlignment PlayerNameText;
+    public TMPro.TextMeshProUGUI PlayerNameText;
 
     public bool IsGrounded = false;
     public float MoveSpeed;
@@ -18,9 +18,15 @@ public class Player : Photon.MonoBehaviour
 
     private void Awake()
     {
-        if(photonView.isMine)
+        if (photonView.isMine)
         {
             PlayerCamera.SetActive(true);
+            PlayerNameText.text = PhotonNetwork.playerName;
+        }
+        else
+        {
+            PlayerNameText.text = photonView.owner.name;
+            PlayerNameText.color = Color.cyan;
         }
     }
 
@@ -38,11 +44,30 @@ public class Player : Photon.MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.A))
         {
-            sr.flipX = true;   
+            photonView.RPC("FlipTrue", PhotonTargets.AllBuffered);
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
-            sr.flipX = false;
+            photonView.RPC("FlipFalse", PhotonTargets.AllBuffered);
         }
+
+        if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))
+        {
+            anim.SetBool("isRunning", true);
+        }
+        else
+        {
+            anim.SetBool("isRunning", false);
+        }
+    }
+    [PunRPC]
+    private void FlipTrue()
+    {
+        sr.flipX = true; 
+    }
+    [PunRPC]
+    private void FlipFalse()
+    {
+        sr.flipX = false;
     }
 }

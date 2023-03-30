@@ -67,7 +67,7 @@ public class Player : Photon.MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.W) && IsGrounded)
         {
-            rb.AddForce(Vector2.up * JumpForce, ForceMode2D.Impulse);
+            transform.Translate(Vector3.up * 260 * Time.deltaTime, Space.World);
             IsGrounded = false;
         }
 

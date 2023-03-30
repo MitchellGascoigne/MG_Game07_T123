@@ -14,7 +14,7 @@ public class Player : Photon.MonoBehaviour
 
     public bool IsGrounded = false;
     public float MoveSpeed;
-    public float JumpForce;
+
 
     private CapsuleCollider2D playerHeadCollider;
 
@@ -67,7 +67,8 @@ public class Player : Photon.MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.W) && IsGrounded)
         {
-            transform.Translate(Vector3.up * 260 * Time.deltaTime, Space.World);
+            //transform.Translate(Vector3.up * 260 * Time.deltaTime, Space.World);
+            rb.velocity = Vector2.up * 10;
             IsGrounded = false;
         }
 

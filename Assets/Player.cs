@@ -16,6 +16,8 @@ public class Player : Photon.MonoBehaviour
     public float MoveSpeed;
     public float JumpForce;
 
+    private CapsuleCollider2D playerHeadCollider;
+
     private void Awake()
     {
         if (photonView.isMine)
@@ -28,6 +30,8 @@ public class Player : Photon.MonoBehaviour
             PlayerNameText.text = photonView.owner.name;
             PlayerNameText.color = Color.cyan;
         }
+
+        playerHeadCollider = GetComponent<CapsuleCollider2D>();
     }
 
     private void Update()
@@ -37,6 +41,7 @@ public class Player : Photon.MonoBehaviour
             CheckInput();
         }
     }
+
     private void CheckInput()
     {
         var move = new Vector3(Input.GetAxisRaw("Horizontal"), 0);
@@ -59,15 +64,47 @@ public class Player : Photon.MonoBehaviour
         {
             anim.SetBool("isRunning", false);
         }
+
+        if (Input.GetKeyDown(KeyCode.W) && IsGrounded)
+        {
+            rb.AddForce(Vector2.up * JumpForce, ForceMode2D.Impulse);
+            IsGrounded = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            Collider2D[] colliders = Physics2D.OverlapCapsuleAll(playerHeadCollider.bounds.center, playerHeadCollider.size, playerHeadCollider.direction, 0);
+            foreach (Collider2D collider in colliders)
+            {
+                if (collider.gameObject.CompareTag("Player") && !collider.isTrigger)
+                {
+                    PhotonView pv = collider.gameObject.GetComponent<PhotonView>();
+                    if (pv != null && !pv.isMine)
+                    {
+                        PhotonNetwork.Destroy(pv.gameObject);
+                    }
+                }
+            }
+        }
     }
+
     [PunRPC]
     private void FlipTrue()
     {
-        sr.flipX = true; 
+        sr.flipX = true;
     }
+
     [PunRPC]
     private void FlipFalse()
     {
         sr.flipX = false;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            IsGrounded = true;
+        }
     }
 }

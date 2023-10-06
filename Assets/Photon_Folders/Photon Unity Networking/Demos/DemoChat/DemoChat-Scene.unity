@@ -2164,7 +2164,6 @@ RectTransform:
   m_Children:
   - {fileID: 160598230}
   - {fileID: 330710525}
-  - {fileID: 1320934696}
   - {fileID: 239533972}
   - {fileID: 742235969}
   m_Father: {fileID: 770857990}
@@ -2570,10 +2569,10 @@ MonoBehaviour:
     The script IgnoreUiRaycastWhenInactive keeps
     inactive panels from blocking input.
 
-    
 
-    All users should use a UserId
-    (to be found as friend).
+
+    All users should use a UserId (to
+    be found as friend).
 
     This message will go away at runtime.'
 --- !u!222 &915497949
@@ -3265,11 +3264,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1223575070}
   m_CullTransparentMesh: 1
---- !u!224 &1320934696 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 9223372036854775806, guid: 3028bc57b884945d5aef896428ae1521, type: 2}
-  m_PrefabInstance: {fileID: 8657376}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1320934697 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 11487092, guid: 3028bc57b884945d5aef896428ae1521, type: 2}
@@ -4124,7 +4118,6 @@ RectTransform:
   m_Children:
   - {fileID: 1670585027}
   - {fileID: 970871620}
-  - {fileID: 1989416849}
   - {fileID: 1508114938}
   m_Father: {fileID: 1507568401}
   m_RootOrder: 3

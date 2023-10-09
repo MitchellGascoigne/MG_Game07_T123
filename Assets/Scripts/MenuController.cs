@@ -31,10 +31,10 @@ public class MenuController : MonoBehaviour
 
     private void Start()
     {
-       // UsernameMenu.SetActive(true);
+       UsernameMenu.SetActive(true);
     }
 
-    private void ChangeUserNameInput()
+    public void ChangeUserNameInput()
     {
         if (UsernameInput.text.Length >= 3)
         {
@@ -46,7 +46,7 @@ public class MenuController : MonoBehaviour
         }
     }
 
-    private void SetUserName()
+    public void SetUserName()
     {
         UsernameMenu.SetActive(false);
         PhotonNetwork.playerName = UsernameInput.text;

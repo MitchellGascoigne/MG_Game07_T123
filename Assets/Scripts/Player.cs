@@ -1,22 +1,22 @@
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Player : Photon.MonoBehaviour
 {
     public PhotonView photonView;
-    public Rigidbody2D rb;
+    public Rigidbody rb;
     public Animator anim;
     public GameObject PlayerCamera;
-    public SpriteRenderer sr;
+    public Renderer renderer; // Changed to Renderer for 3D
     public TMPro.TextMeshProUGUI PlayerNameText;
 
     public bool IsGrounded = false;
     public float MoveSpeed;
+    public float JumpForce; // Added for jumping
 
-
-    private CapsuleCollider2D playerHeadCollider;
+    private CapsuleCollider playerHeadCollider; // Changed to CapsuleCollider for 3D
 
     private void Awake()
     {
@@ -31,7 +31,7 @@ public class Player : Photon.MonoBehaviour
             PlayerNameText.color = Color.cyan;
         }
 
-        playerHeadCollider = GetComponent<CapsuleCollider2D>();
+        playerHeadCollider = GetComponent<CapsuleCollider>(); // Changed to CapsuleCollider for 3D
     }
 
     private void Update()
@@ -44,19 +44,30 @@ public class Player : Photon.MonoBehaviour
 
     private void CheckInput()
     {
-        var move = new Vector3(Input.GetAxisRaw("Horizontal"), 0);
-        transform.position += move * MoveSpeed * Time.deltaTime;
+        // Get input for WASD keys
+        float horizontalInput = Input.GetAxis("Horizontal"); // A and D keys
+        float verticalInput = Input.GetAxis("Vertical");     // W and S keys
 
-        if (Input.GetKey(KeyCode.A))
+        Vector3 move = new Vector3(horizontalInput, 0, verticalInput); // Use 3D vector
+
+        // Normalize the move vector to prevent faster diagonal movement
+        if (move.magnitude > 1)
         {
-            photonView.RPC("FlipTrue", PhotonTargets.AllBuffered);
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            photonView.RPC("FlipFalse", PhotonTargets.AllBuffered);
+            move.Normalize();
         }
 
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
+        // Move the player using Rigidbody (apply force)
+        rb.velocity = move * MoveSpeed;
+
+        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded)
+        {
+            // Jump using Rigidbody (apply upward force)
+            rb.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
+            IsGrounded = false;
+        }
+
+        // Handle animation (you may need to set animator parameters)
+        if (move.magnitude > 0)
         {
             anim.SetBool("isRunning", true);
         }
@@ -65,43 +76,34 @@ public class Player : Photon.MonoBehaviour
             anim.SetBool("isRunning", false);
         }
 
-        if (Input.GetKeyDown(KeyCode.W) && IsGrounded)
+        // Handle flipping the player's sprite (or model) based on input
+        if (move.x < 0)
         {
-            //transform.Translate(Vector3.up * 260 * Time.deltaTime, Space.World);
-            rb.velocity = Vector2.up * 10;
-            IsGrounded = false;
+            photonView.RPC("FlipTrue", PhotonTargets.AllBuffered);
+        }
+        else if (move.x > 0)
+        {
+            photonView.RPC("FlipFalse", PhotonTargets.AllBuffered);
         }
 
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            Collider2D[] colliders = Physics2D.OverlapCapsuleAll(playerHeadCollider.bounds.center, playerHeadCollider.size, playerHeadCollider.direction, 0);
-            foreach (Collider2D collider in colliders)
-            {
-                if (collider.gameObject.CompareTag("Player") && !collider.isTrigger)
-                {
-                    PhotonView pv = collider.gameObject.GetComponent<PhotonView>();
-                    if (pv != null && !pv.isMine)
-                    {
-                        PhotonNetwork.Destroy(pv.gameObject);
-                    }
-                }
-            }
-        }
+        // Handle other actions as needed (e.g., shooting)
     }
 
     [PunRPC]
     private void FlipTrue()
     {
-        sr.flipX = true;
+        // Adjust the player's rotation or sprite flipping as needed
+        transform.rotation = Quaternion.Euler(0, 180, 0); // Rotate 180 degrees around the Y-axis
     }
 
     [PunRPC]
     private void FlipFalse()
     {
-        sr.flipX = false;
+        // Reset the player's rotation or sprite flipping as needed
+        transform.rotation = Quaternion.identity; // Reset rotation
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
         {

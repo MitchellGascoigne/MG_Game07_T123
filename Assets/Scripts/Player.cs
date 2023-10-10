@@ -1,16 +1,17 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : Photon.MonoBehaviour
 {
-    public PhotonView photonView;
+    public PhotonView MyPhotonView;
     public Rigidbody rb;
     public Animator anim;
     public GameObject PlayerCamera;
-    public Renderer renderer; // Changed to Renderer for 3D
-    public TMPro.TextMeshProUGUI PlayerNameText;
+    public Renderer myRenderer; // Changed to Renderer for 3D
+    public Text PlayerNameText;
+    // public TMPro.TextMeshProUGUI PlayerNameText;
 
     public bool IsGrounded = false;
     public float MoveSpeed;
@@ -27,7 +28,7 @@ public class Player : Photon.MonoBehaviour
         }
         else
         {
-            PlayerNameText.text = photonView.owner.name;
+            PlayerNameText.text = photonView.owner.NickName;
             PlayerNameText.color = Color.cyan;
         }
 

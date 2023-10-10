@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject PlayerPrefab;
+    public GameObject PlayerPrefab; // Assign your 3D player prefab in the Inspector
     public GameObject GameCanvas;
     public GameObject SceneCamera;
     public TMPro.TextMeshProUGUI PingText;
@@ -25,17 +25,26 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         GameCanvas.SetActive(true); 
-
     }
-
     public void SpawnPlayer()
     {
-        float randomValue = Random.Range(-1f, 1f);
+        float randomValueX = Random.Range(-1f, 10f); // Adjust the range for X position
+        float randomValueZ = Random.Range(-1f, 6f);  // Adjust the range for Z position
 
-        PhotonNetwork.Instantiate(PlayerPrefab.name, new Vector2(this.transform.position.x * randomValue, this.transform.position.y), Quaternion.identity, 0);
+        // Set the Y position to -1
+        float yPosition = -1f;
+
+        Vector3 spawnPosition = new Vector3(randomValueX, yPosition, randomValueZ);
+
+        PhotonNetwork.Instantiate(PlayerPrefab.name, spawnPosition, Quaternion.identity, 0);
+
+        // Disable or hide any UI or cameras as needed
         GameCanvas.SetActive(false);
         SceneCamera.SetActive(false);
-        Debug.Log("Player");
+
+        Debug.Log("Player Spawned");
     }
 
 }
+
+
